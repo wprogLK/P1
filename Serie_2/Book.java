@@ -3,6 +3,9 @@
  Aufgabe 2-2
  */
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -59,15 +62,44 @@ public class Book {
 	/** Reads all book data from user input */
 	public void input() throws ParseException {
 		
-		Scanner scn = new Scanner(System.in);
-		System.out.print("Please enter id: ");
-		this.id = scn.nextInt();
-		System.out.print("Please enter title: ");
-		this.title = scn.next();
-		System.out.print("Please enter author: ");
-		this.author = scn.next();
-		System.out.print("Please enter date of publication (format dd.mm.yyyy): ");
-		this.dateOfPublication = stringToDate(scn.next());		
+		//Scanner scn = new Scanner(System.in);
+		
+		//System.out.print("Please enter id: ");
+		//this.id = scn.nextInt();
+		
+		//System.out.print("Please enter title: ");
+		//this.title = scn.nextLine();
+		
+		//System.out.print("Please enter author: ");
+		//this.author = scn.nextLine();
+		
+		//System.out.print("Please enter date of publication (format dd.mm.yyyy): ");
+		//this.dateOfPublication = stringToDate(scn.nextLine());	
+		
+		
+		this.id=Integer.parseInt(this.askUser("Please enter id: "));
+		this.title=this.askUser("Please enter title: ");
+		this.author=this.askUser("Please enter author: ");
+		this.dateOfPublication=this.stringToDate(this.askUser("Please enter date of publication (format dd.mm.yyyy): "));
+	}
+	
+	private String askUser(String message)
+	{
+		BufferedReader console = new BufferedReader(new InputStreamReader(System.in)); //TODO Maybe use another InputStream than System.in (make it more flexible)
+		String line = null;
+
+		System.out.print(message);	
+
+		try 
+		{
+			line = console.readLine();
+		} 
+		catch (IOException e) 
+		{
+			askUser(message);
+		}
+		
+		return line;
 	}
 
 	/** Getters and setters */
