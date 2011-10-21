@@ -3,6 +3,7 @@
  Aufgabe 2-2
  */
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,6 +18,14 @@ public class Book {
 	public static final String DATE_FORMAT = "dd.MM.yyyy";
 
 	// constructors
+	public Book()
+	{
+		this.id = 0;
+		this.title = "";
+		this.author = "";
+		this.dateOfPublication = new Date();		
+	}
+	
 	public Book(int id, String title, String author, Date dateOfPublication) {
 		this.id = id;
 		this.title = title;
@@ -28,27 +37,37 @@ public class Book {
 	public int age() {
 
 		Date today = new Date();
-		int dayToday=today.getDate();
-		int monthToday=today.getMonth();
-		int yearToday=today.getTime();	//TODO
-		
-		
-		today.;
+		long diff_ms = today.getTime() - this.dateOfPublication.getTime();
+		long diff_days = (diff_ms / (1000*60*60*24));
 
-		return 0; // this is to avoid compiler errors, replace it!
+		return (int)diff_days;
 	}
 
 	/** Returns a String representation of the book */
 	public String toString() {
-		// TODO
-		return ""; // this is to avoid compiler errors, replace it!
+		StringBuilder sb = new StringBuilder();
+		SimpleDateFormat datefmt = new SimpleDateFormat(DATE_FORMAT);
+		
+		sb.append(this.id + ", ");
+		sb.append(this.title + ", ");
+		sb.append(this.author + ", ");
+		sb.append(datefmt.format(this.dateOfPublication));
+		
+		return sb.toString();
 	}
 
 	/** Reads all book data from user input */
 	public void input() throws ParseException {
+		
 		Scanner scn = new Scanner(System.in);
 		System.out.print("Please enter id: ");
-		// TODO
+		this.id = scn.nextInt();
+		System.out.print("Please enter title: ");
+		this.title = scn.next();
+		System.out.print("Please enter author: ");
+		this.author = scn.next();
+		System.out.print("Please enter date of publication (format dd.mm.yyyy): ");
+		this.dateOfPublication = stringToDate(scn.next());		
 	}
 
 	/** Getters and setters */

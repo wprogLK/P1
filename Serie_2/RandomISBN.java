@@ -4,13 +4,20 @@
  */
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Random;
 
 public class RandomISBN {
 
-	public static void main(String args[]) {
-		// TO DO
+	public static void main(String args[]) throws ParseException {
+
 		System.out.println(makeISBN());
+		Date date = new GregorianCalendar(2010,0,21).getTime();
+		Book book = new Book();
+		book.input();
+		System.out.println(book.toString());
 	}
 
 	/** generates and returns a random ISBN number in the format XX-XXX-XX-C */
