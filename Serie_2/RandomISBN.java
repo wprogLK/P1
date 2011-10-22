@@ -9,20 +9,20 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Random;
 
-public class RandomISBN {
+public class RandomISBN
+{
 
-	public static void main(String args[]) throws ParseException {
-
+	public static void main(String args[]) throws ParseException
+	{
 		System.out.println(makeISBN());
-		Date date = new GregorianCalendar(2010,0,21).getTime();
 		Book book = new Book();
 		book.input();
 		System.out.println(book.toString());
 	}
 
 	/** generates and returns a random ISBN number in the format XX-XXX-XX-C */
-	public static String makeISBN() {
-
+	public static String makeISBN()
+	{
 		String laendercode;
 		String bandnr;
 		String verlagsnr;
@@ -41,6 +41,7 @@ public class RandomISBN {
 		int int_verlagsnr = random.nextInt(100);
 		verlagsnr = formatter.format(int_verlagsnr);
 
+		// Extract digits
 		int l1 = int_laendercode / 10;
 		int l2 = int_laendercode % 10;
 
@@ -51,17 +52,19 @@ public class RandomISBN {
 		int v1 = int_verlagsnr / 10;
 		int v2 = int_verlagsnr % 10;
 
-		Integer int_checksum = (hashOp(l1) + l2 + hashOp(b1) + b2 + hashOp(b3)
-				+ v1 + hashOp(v2)) % 10;
+		// Compute checksum
+		Integer int_checksum = (hashOp(l1) + l2 + hashOp(b1) + b2 + hashOp(b3) + v1 + hashOp(v2)) % 10;
 		checksum = int_checksum.toString();
 
 		return laendercode + "-" + bandnr + "-" + verlagsnr + "-" + checksum;
 	}
 
 	/** multiplies i with 2 and subtracts 9 if result is >= 10 */
-	public static int hashOp(int i) {
+	public static int hashOp(int i)
+	{
 		int doubled = 2 * i;
-		if (doubled >= 10) {
+		if (doubled >= 10)
+		{
 			doubled = doubled - 9;
 		}
 		return doubled;
