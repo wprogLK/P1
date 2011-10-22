@@ -85,7 +85,7 @@ public class Book {
 	
 	private String askUser(String message)
 	{
-		BufferedReader console = new BufferedReader(new InputStreamReader(System.in)); //TODO Maybe use another InputStream than System.in (make it more flexible)
+		BufferedReader console = new BufferedReader(new InputStreamReader(System.in));
 		String line = null;
 
 		System.out.print(message);	
