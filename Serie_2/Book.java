@@ -37,8 +37,8 @@ public class Book
 	/** Returns the age of the book in days since publication */
 	public int age()
 	{
-
 		Date today = new Date();
+		
 		long diff_ms = today.getTime() - this.dateOfPublication.getTime();
 		long diff_days = (diff_ms / (1000 * 60 * 60 * 24));
 
