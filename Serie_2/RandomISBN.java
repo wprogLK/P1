@@ -14,10 +14,8 @@ public class RandomISBN
 
 	public static void main(String args[]) throws ParseException
 	{
-		System.out.println(makeISBN());
-		Book book = new Book();
-		book.input();
-		System.out.println(book.toString());
+		for (int i = 0; i < 100; i++)
+			System.out.println(RandomISBN.makeISBN());
 	}
 
 	/** generates and returns a random ISBN number in the format XX-XXX-XX-C */
