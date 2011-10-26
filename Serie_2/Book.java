@@ -38,7 +38,7 @@ public class Book
 	public int age()
 	{
 		Date today = new Date();
-		
+
 		long diff_ms = today.getTime() - this.dateOfPublication.getTime();
 		long diff_days = (diff_ms / (1000 * 60 * 60 * 24));
 
@@ -118,6 +118,11 @@ public class Book
 	public void setDateOfPublication(Date dateOfPublication)
 	{
 		this.dateOfPublication = dateOfPublication;
+	}
+	
+	public void setDateOfPublication(String dateRepresentation) throws ParseException
+	{
+		this.dateOfPublication = stringToDate(dateRepresentation);
 	}
 
 	// private methods --------------------------------------------
