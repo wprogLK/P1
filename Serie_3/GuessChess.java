@@ -1,14 +1,9 @@
 import java.util.Random;
 import java.util.Scanner;
 
-/*
-
-*/
-
-
 public class GuessChess
 {
-
+	enum Direction { UP, RIGHT,  DOWN,  LEFT, NO_CHANGE};
 	private GameField secretField;
 	public final int MAX_GUESSES = 3;
 	
@@ -18,20 +13,26 @@ public class GuessChess
 		game.start();
 	}
 
-
-	// your code goes here...
 	private void start() 
 	{
-		this.secretField = new GameField(); // Init random
+		Boolean playAgain = true;
 		this.showWelcomeScreen();
 		
-		this.printEmptyBoard();
-		
-		for (int i = 0; i < MAX_GUESSES; i++) 
+		while (playAgain) 
 		{
-			this.printState(i);
-			GameField field = this.guessField();
-			this.printBoard(field.getColumn(), field.getRow());
+			this.secretField = new GameField(); // Init random
+			this.printEmptyBoard();
+			for (int i = 0; i < MAX_GUESSES; i++) 
+			{
+				this.printState(i);
+				GameField guessedField = this.guessField();
+				this.printBoard(guessedField.getColumn(), guessedField.getRow());
+				Boolean won = this.giveFeedback(guessedField, i == MAX_GUESSES - 1);
+				if (won) break;
+			}
+			System.out.print("Do you want to play again? [y/n]: ");
+			Scanner scn = new Scanner(System.in);
+			playAgain = (scn.nextLine().contains("y")) ? true : false;
 		}
 	}
 	
@@ -50,30 +51,64 @@ public class GuessChess
 	
 	private void printState(int tries)
 	{
-		System.out.println(String.format("You have %d attempts left.", MAX_GUESSES - tries));
+		System.out.print(String.format("You have %d attempts left. ", MAX_GUESSES - tries));
 	}
 	
-	private Boolean giveFeedback(GameField field)
+	private Boolean giveFeedback(GameField field, Boolean gameOver)
 	{
 		if (field.equals(this.secretField))
 		{
-			System.out.println("You guessed the right field! Congratulations! But you suck anyway...");
+			System.out.println("You guessed the right field! Congratulations!");
 			return true;
 		}
 		else
 		{
-			
+			System.out.println(this.createFeedback(field, gameOver));
+			return false;
 		}
-		return false;
 	}
 	
-	
+	private String createFeedback(GameField field, Boolean gameOver)
+	{
+		StringBuilder sb = new StringBuilder();
+		Direction[] dir = field.getDirectionTo(secretField);
+		
+		if (gameOver)
+		{
+			sb.append("Your guess was wrong and you lost.");
+			sb.append("The secret field was on " + this.secretField.toString());
+			return sb.toString();
+		}
+		
+		sb.append("Your guess was wrong! You have to go ");
+		
+		switch (dir[0])
+		{
+		case LEFT:
+			sb.append("LEFT");
+			break;
+		case RIGHT:
+			sb.append("RIGHT");
+			break;
+			default: break;
+		}
+		
+		switch (dir[1])
+		{
+		case UP:
+			sb.append(" UP");
+			break;
+		case DOWN:
+			sb.append(" DOWN");
+			break;
+			default: break;
+		}
+		
+		return sb.toString();
+	}	
 
 	// ==================================================================
 	// Helper methods:
-	
-	
-
 
 	/** prints a chess board with an 'X' on the field defined by column and row	*/
 	private void printBoard(char column, int row){
@@ -148,13 +183,11 @@ public class GuessChess
 		private int row;
 		private char column;
 		
-		public enum Direction { UP, RIGHT,  DOWN,  LEFT, NO_CHANGE};
-		
 		public GameField()
 		{
 			Random rnd = new Random();
-			this.row = rnd.nextInt(8);
-			this.column = GuessChess.getColumnAsChar(rnd.nextInt(8));
+			this.row = rnd.nextInt(8) + 1;
+			this.column = GuessChess.getColumnAsChar(rnd.nextInt(8) + 1);
 		}
 		public GameField(int row, char column)
 		{
@@ -185,29 +218,40 @@ public class GuessChess
 			return false;
 		}
 		
-		private static Direction compareRows(GameField guessedField, GameField secretField)
+		private Direction compareRowsTo(GameField targetField)
 		{
-			if (guessedField.getRow() > secretField.getRow())
-				return Direction.DOWN;
-			if (guessedField.getRow()== secretField.getRow())
+			if (targetField.getRow() > this.row)
+				return Direction.UP;
+			if (targetField.getRow() == this.row)
 				return Direction.NO_CHANGE;
 			else
-				return Direction.UP;
+				return Direction.DOWN;
 		}
 		
-		private static Direction compareColumns(GameField gf)
+		private Direction compareColumnsTo(GameField targetField)
 		{
-			if (guessedField.getRow() > secretField.getRow())
-				return Direction.DOWN;
-			if (guessedField.getRow()== secretField.getRow())
+			int tfi = getColumnAsInt(targetField.getColumn());
+			int ti = getColumnAsInt(this.column);
+			
+			if (tfi > ti)
+				return Direction.RIGHT;
+			if (tfi == ti)
 				return Direction.NO_CHANGE;
 			else
-				return Direction.UP;
+				return Direction.LEFT;
 		}
 		
-		public Direction getDirection(GameField field)
+		public Direction[] getDirectionTo(GameField targetField)
 		{
-			if (this.compareRows(field))
+			Direction[] dir = new Direction[2];
+			dir[0] = this.compareColumnsTo(targetField);
+			dir[1] = this.compareRowsTo(targetField);
+			return dir;
+		}
+		
+		public String toString()
+		{
+			return String.format("%s%d", this.column, this.row);
 		}
 	}	
 }
