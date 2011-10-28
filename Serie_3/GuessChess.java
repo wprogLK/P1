@@ -15,7 +15,10 @@ public class GuessChess
 
 	private void start() 
 	{
+		int gamesLost = 0, gamesWon = 0;
 		Boolean playAgain = true;
+		Boolean won = false, lost = false;
+		
 		this.showWelcomeScreen();
 		
 		while (playAgain) 
@@ -27,13 +30,21 @@ public class GuessChess
 				this.printState(i);
 				GameField guessedField = this.guessField();
 				this.printBoard(guessedField.getColumn(), guessedField.getRow());
-				Boolean won = this.giveFeedback(guessedField, i == MAX_GUESSES - 1);
+				won = this.getWinner(guessedField);
+				lost = (!won) && (i == MAX_GUESSES - 1);
+				System.out.println(this.getFeedback(guessedField, won, lost));
 				if (won) break;
 			}
+			
+			if (won) gamesWon++;
+			if (lost) gamesLost++;
+			
 			System.out.print("Do you want to play again? [y/n]: ");
 			Scanner scn = new Scanner(System.in);
 			playAgain = (scn.nextLine().contains("y")) ? true : false;
 		}
+		System.out.println(String.format("Games played: %d, Games won: %d, Games lost: %d", 
+				gamesLost+gamesWon, gamesWon, gamesLost));		
 	}
 	
 	private GameField guessField()
@@ -54,28 +65,22 @@ public class GuessChess
 		System.out.print(String.format("You have %d attempts left. ", MAX_GUESSES - tries));
 	}
 	
-	private Boolean giveFeedback(GameField field, Boolean gameOver)
+	private Boolean getWinner(GameField field)
 	{
-		if (field.equals(this.secretField))
-		{
-			System.out.println("You guessed the right field! Congratulations!");
-			return true;
-		}
-		else
-		{
-			System.out.println(this.createFeedback(field, gameOver));
-			return false;
-		}
+		return field.equals(this.secretField);
 	}
 	
-	private String createFeedback(GameField field, Boolean gameOver)
+	private String getFeedback(GameField field, Boolean won, Boolean gameOver)
 	{
+		if (won)
+			return "You guessed the right field. Congratulations!";
+		
 		StringBuilder sb = new StringBuilder();
 		Direction[] dir = field.getDirectionTo(secretField);
 		
 		if (gameOver)
 		{
-			sb.append("Your guess was wrong and you lost.");
+			sb.append("Your guess was wrong and you lost. ");
 			sb.append("The secret field was on " + this.secretField.toString());
 			return sb.toString();
 		}
@@ -93,13 +98,16 @@ public class GuessChess
 			default: break;
 		}
 		
+		if (dir[0] != Direction.NO_CHANGE && dir[1] != Direction.NO_CHANGE)
+			sb.append(" and ");
+		
 		switch (dir[1])
 		{
 		case UP:
-			sb.append(" UP");
+			sb.append("UP");
 			break;
 		case DOWN:
-			sb.append(" DOWN");
+			sb.append("DOWN");
 			break;
 			default: break;
 		}
