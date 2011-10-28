@@ -1,6 +1,10 @@
 /*
  Programmierung 1 HS 2011
  Aufgabe 2-2
+ 
+Authors: 	
+	Lukas Keller (10-113-736)
+	Urs Gerber (09-921-156)
  */
 
 import java.text.ParseException;

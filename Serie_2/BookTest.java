@@ -1,3 +1,11 @@
+/*
+ Programmierung 1 HS 2011
+ Aufgabe 2-2
+ 
+Authors: 	
+	Lukas Keller (10-113-736)
+	Urs Gerber (09-921-156)
+*/
 import java.text.ParseException;
 import java.util.Scanner;
 
@@ -7,7 +15,7 @@ public class BookTest
 	{
 		// Create new Book instance
 		Book book = new Book();
-		// Set up properties
+		// Set up properties using user input
 		book.input();
 		// Show properties to user, test getters
 		System.out.println(String.format("This book's ID is %d", book.getId()));
