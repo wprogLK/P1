@@ -5,6 +5,7 @@ public class GuessChess
 {
 	enum Direction { UP, RIGHT,  DOWN,  LEFT, NO_CHANGE};
 	private GameField secretField;
+	private GameStatistics stats;
 	public final int MAX_GUESSES = 3;
 	
 	public static void main (String[] args) 
@@ -15,38 +16,51 @@ public class GuessChess
 
 	private void start() 
 	{
-		int gamesLost = 0, gamesWon = 0;
 		Boolean playAgain = true;
 		Boolean won = false, lost = false;
+		this.stats = new GameStatistics();
 		
+		// Show welcome screen to player
 		this.showWelcomeScreen();
 		
+		// Game loop
 		while (playAgain) 
 		{
-			this.secretField = new GameField(); // Init random
+			// Create random secret field
+			this.secretField = GameField.createSecretGameField();
+			// Draw emty Board
 			this.printEmptyBoard();
+			// Loop until maximum guess count is reached
 			for (int i = 0; i < MAX_GUESSES; i++) 
 			{
+				// Print game state
 				this.printState(i);
+				// Ask user to guess a field
 				GameField guessedField = this.guessField();
+				// Print board with highlit user field
 				this.printBoard(guessedField.getColumn(), guessedField.getRow());
+				// Check whether player has guessed the right field
 				won = this.getWinner(guessedField);
+				// Determine whether player has lost
 				lost = (!won) && (i == MAX_GUESSES - 1);
+				// present result to player
 				System.out.println(this.getFeedback(guessedField, won, lost));
+				// if player has won, leave loop
 				if (won) break;
 			}
-			
-			if (won) gamesWon++;
-			if (lost) gamesLost++;
-			
+			// Update game statistics
+			if (won) this.stats.incrementGamesWon();
+			if (lost) this.stats.incrementGamesLost();
+			// Ask player to start over
 			System.out.print("Do you want to play again? [y/n]: ");
 			Scanner scn = new Scanner(System.in);
 			playAgain = (scn.nextLine().contains("y")) ? true : false;
 		}
-		System.out.println(String.format("Games played: %d, Games won: %d, Games lost: %d", 
-				gamesLost+gamesWon, gamesWon, gamesLost));		
+		// Print game statistics
+		System.out.println(this.stats.toString());	
 	}
 	
+	// Asks player to guess a field and returns said field
 	private GameField guessField()
 	{
 		Scanner scn = new Scanner(System.in);
@@ -60,16 +74,19 @@ public class GuessChess
 		return guessedField;
 	}
 	
+	// Presents current game state to player
 	private void printState(int tries)
 	{
 		System.out.print(String.format("You have %d attempts left. ", MAX_GUESSES - tries));
 	}
 	
+	// Determines whether player has guessed the right field
 	private Boolean getWinner(GameField field)
 	{
 		return field.equals(this.secretField);
 	}
 	
+	// Prints feedback to player according to game state
 	private String getFeedback(GameField field, Boolean won, Boolean gameOver)
 	{
 		if (won)
@@ -186,17 +203,70 @@ public class GuessChess
 		}
 	}
 	
-	private class GameField 
+	public class GameStatistics
+	{
+		private int totalGamesPlayed;
+		private int gamesWon;
+		private int gamesLost;
+		
+		public void incrementGamesWon()
+		{
+			this.gamesWon++;
+			this.totalGamesPlayed = this.gamesWon + this.gamesLost;
+		}
+		public void incrementGamesLost()
+		{
+			this.gamesLost++;
+			this.totalGamesPlayed = this.gamesWon + this.gamesLost;
+		}
+		public int getGamesPlayed()
+		{
+			return this.totalGamesPlayed;
+		}
+		public int getGamesWon()
+		{
+			return this.gamesWon;
+		}
+		public int getGamesLost()
+		{
+			return this.gamesLost;
+		}
+		public void reset()
+		{
+			this.gamesLost = 0;
+			this.gamesWon = 0;
+			this.totalGamesPlayed = 0;
+		}
+		public String toString()
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.append("Games played: " + this.totalGamesPlayed);
+			sb.append(", Games won: " + this.gamesWon);
+			sb.append(", Games lost: " + this.gamesLost);
+			return sb.toString();
+		}
+	}
+	
+	private static class GameField 
 	{
 		private int row;
 		private char column;
 		
 		public GameField()
 		{
-			Random rnd = new Random();
-			this.row = rnd.nextInt(8) + 1;
-			this.column = GuessChess.getColumnAsChar(rnd.nextInt(8) + 1);
+			this.row = 0;
+			this.column = 0;
 		}
+		
+		public static GameField createSecretGameField()
+		{
+			Random rnd = new Random();
+			GameField sf = new GameField();
+			sf.row = rnd.nextInt(8) + 1;
+			sf.column = GuessChess.getColumnAsChar(rnd.nextInt(8) + 1);
+			return sf;
+		}
+		
 		public GameField(int row, char column)
 		{
 			this.row = row;
@@ -207,6 +277,7 @@ public class GuessChess
 			return row;
 		}
 
+		@SuppressWarnings("unused")
 		public void setRow(int row) {
 			this.row = row;
 		}
@@ -215,6 +286,7 @@ public class GuessChess
 			return column;
 		}
 
+		@SuppressWarnings("unused")
 		public void setColumn(char column) {
 			this.column = column;
 		}
