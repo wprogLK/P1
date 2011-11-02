@@ -37,7 +37,7 @@ public class GuessChess
 				this.printState(i);
 				// Ask user to guess a field
 				GameField guessedField = this.guessField();
-				// Print board with highlit user field
+				// Print board with highlighted user field
 				this.printBoard(guessedField.getColumn(), guessedField.getRow());
 				// Check whether player has guessed the right field
 				won = this.getWinner(guessedField);

@@ -12,14 +12,16 @@ public class Book{
 	private String title;
 	private String author;
 	private Date dateOfPublication;
+	private int price;
 
 	public static final String DATE_FORMAT = "dd.MM.yyyy";
 
-	public Book(int tmpId, String tmpTitle, String tmpAuthor, Date tmpDateOfPubl){
+	public Book(int tmpId, String tmpTitle, String tmpAuthor, Date tmpDateOfPubl, int price){
 		id = tmpId;
 		title = tmpTitle;
 		author = tmpAuthor;
 		dateOfPublication = tmpDateOfPubl;
+		this.price = (price < 0) ? 0 : price;
 	}
 
 	public Book(){
@@ -40,7 +42,8 @@ public class Book{
 	/** Returns a String representation of the book */
 	public String toString(){
 		return id + ", " + title + ", " + author +
-			", " + dateToString(dateOfPublication);
+			", " + dateToString(dateOfPublication) + ", " + 
+				this.price + " CHF";
 	}
 
 	/** Reads all book data from user input */
@@ -81,6 +84,14 @@ public class Book{
 	}
 	public void setDateOfPublication(Date newDate){
 		dateOfPublication = newDate;
+	}
+	public int getPrice()
+	{
+		return this.price;
+	}
+	public void setPrice(int newPrice)
+	{
+		this.price = (newPrice < 0) ? 0 : newPrice;
 	}
 	
 	// private methods --------------------------------------------
