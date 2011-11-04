@@ -34,6 +34,16 @@ public class Order {
 		}
 		return totalPrice;
 	}
+	
+	public void setCustomerName(String customerName)
+	{
+		this.customerName = customerName;
+	}
+	
+	public void setCustomerAddress(String customerAddress)
+	{
+		this.customerAddress = customerAddress;
+	}
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
