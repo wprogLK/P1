@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class Order {
 	private int id;
 	private String customerName;
@@ -9,7 +7,7 @@ public class Order {
 	private Book bookC;
 	private Book bookD;
 	private Book bookE;
-	
+
 	private int bookCount;
 	private int totalPrice;
 
@@ -43,8 +41,8 @@ public class Order {
 	}
 
 	public void addBook(Book book) {
-		switch (this.bookCount)
-		{
+
+		switch (this.bookCount) {
 		case 0:
 			this.bookA = book;
 			break;
@@ -63,8 +61,11 @@ public class Order {
 		default:
 			break;
 		}
-		this.bookCount++;
-		this.totalPrice += book.getPrice();
+
+		if (this.bookCount < 5) {
+			this.bookCount++;
+			this.totalPrice += book.getPrice();
+		}
 	}
 
 	public int getTotalPrice() {
@@ -78,17 +79,29 @@ public class Order {
 				this.customerName, this.customerAddress));
 		if (this.bookCount == 0)
 			sb.append("No Books in Order!");
-		else 
-		{
-			if (this.bookCount > 0) sb.append(bookA.toString());
-			if (this.bookCount > 1) sb.append(bookB.toString());
-			if (this.bookCount > 2) sb.append(bookC.toString());
-			if (this.bookCount > 3) sb.append(bookD.toString());
-			if (this.bookCount > 4) sb.append(bookE.toString());
+		else {
+			if (this.bookCount > 0)
+				sb.append(bookA.toString());
+			if (this.bookCount > 1)
+				sb.append(bookB.toString());
+			if (this.bookCount > 2)
+				sb.append(bookC.toString());
+			if (this.bookCount > 3)
+				sb.append(bookD.toString());
+			if (this.bookCount > 4)
+				sb.append(bookE.toString());
 		}
-			
+
 		sb.append(String.format("Total price: %d CHF\n", this.getTotalPrice()));
 
 		return sb.toString();
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
+	}
+
+	public void setCustomerAddress(String address) {
+		this.customerAddress = address;
 	}
 }
