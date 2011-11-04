@@ -62,7 +62,7 @@ public class Order {
 			break;
 		}
 
-		if (this.bookCount < 5) {
+		if (this.bookCount < Order.MAX_BOOK_COUNT) {
 			this.bookCount++;
 			this.totalPrice += book.getPrice();
 		}
@@ -92,7 +92,7 @@ public class Order {
 				sb.append(bookE.toString());
 		}
 
-		sb.append(String.format("Total price: %d CHF\n", this.getTotalPrice()));
+		sb.append(String.format("Total price: %d CHF", this.getTotalPrice()));
 
 		return sb.toString();
 	}

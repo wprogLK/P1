@@ -43,7 +43,7 @@ public class Book{
 	public String toString(){
 		return id + ", " + title + ", " + author +
 			", " + dateToString(dateOfPublication) + ", " + 
-				this.price + " CHF";
+				this.price + " CHF\n";
 	}
 
 	/** Reads all book data from user input */
