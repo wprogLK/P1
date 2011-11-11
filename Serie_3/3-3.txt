@@ -7,15 +7,15 @@ a=1, b=1
 int i = 1;
 do
 {
-	i++;
-	System.out.println(i)
+	System.out.println(++i);	
 }
-while (i < 9)
+while (i < 10)
 
-for (int i = 1; i<10; i++)
+for (int i = 2; i < 11; i++)
 {
-	System.out.println(i-1);
+	System.out.println(i);
 }
 
 3.
 Falls die Variable "limit" nicht ohne Rest durch 3 teilbar ist, terminiert die Schleife nicht.
+Das Problem tritt erst zur Laufzeit auf.
