@@ -60,13 +60,13 @@ public class VierGewinnt {
 		else System.out.println("Draw! Game over.");
 	}
 	
-	
 	/** Inserts the token at the specified column (if possible)
 	    and returns the row where the token landed */
 	private int insertToken(int column, Token tok) {
 		
 		if (columnIsFull(column))
 			return -1;
+		
 		int finalRow = 0;
 		for (int row = 0; row < ROWS; row++)
 		{
@@ -90,7 +90,6 @@ public class VierGewinnt {
 		return true;
 	}
 	
-	
 	/** Checks if every position is occupied */
 	private boolean isBoardFull() {
 		for (int i = 0; i < COLS; i++)
@@ -113,11 +112,9 @@ public class VierGewinnt {
 		for (Direction direction : Direction.values())
 		{
 			Token lastToken = board[col][row];
-			System.out.println(direction);
 			if (checkLineOfTokens(getLineOfTokens(col, row, direction), lastToken))
 				return true;
 		}
-		
 		return false;
 	}
 	
@@ -126,6 +123,7 @@ public class VierGewinnt {
 		ArrayList<Token> lineOfTokens = new ArrayList<Token>();
 		int[] offset = new int[2];
 		int[] dir = new int[2];
+		
 		switch (direction)
 		{
 		case HORIZONTAL:
@@ -155,7 +153,6 @@ public class VierGewinnt {
 			position[0] += dir[0];
 			position[1] += dir[1];
 		}
-		System.out.println(Arrays.toString(lineOfTokens.toArray()));
 		return lineOfTokens;
 	}
 	
@@ -165,21 +162,13 @@ public class VierGewinnt {
 		for (Token token : lineOfTokens)
 		{
 			if (token == lastToken)
-			{
 				counter++;
-			}
 			else
-			{
 				counter = 0;
-			}
 			
 			if (counter>=4)
-			{
 				return true;
-			}
-			
 		}
-		
 		return false;
 	}
 	
@@ -210,8 +199,6 @@ public class VierGewinnt {
 		presentation += rowNumbering;
 		return presentation;
 	}
-	
-	
 	
 	/** main method, starts the program */
 	public static void main(String args[]){
