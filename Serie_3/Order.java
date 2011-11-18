@@ -24,7 +24,8 @@ public class Order {
 	}
 
 	public void addBook(Book book) {
-		this.books.add(book);
+		if (this.books.size() < Order.MAX_BOOK_COUNT)
+			this.books.add(book);
 	}
 
 	public int getTotalPrice() {
@@ -53,7 +54,7 @@ public class Order {
 		for (Book book : this.books) {
 			sb.append(book.toString() + "\n" );
 		}
-		sb.append(String.format("Total price: %d CHF\n", this.getTotalPrice()));
+		sb.append(String.format("Total price: %d CHF", this.getTotalPrice()));
 
 		return sb.toString();
 	}
