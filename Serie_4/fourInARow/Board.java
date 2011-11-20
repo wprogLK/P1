@@ -2,7 +2,6 @@ package fourInARow;
 
 import java.util.ArrayList;
 
-import fourInARow.Move;
 import fourInARow.VierGewinnt.Token;
 
 public class Board
@@ -58,12 +57,14 @@ public class Board
 		return this.board[col][row];
 	}
 	
-	public Board makeGhostMove(int column, Token token)
+	public void makeMove(int column, Token player)
 	{
-		Board ghostBoard = new Board();
-		ghostBoard = this.clone();
-		ghostBoard.insertToken(column, token);
-		return ghostBoard;
+		insertToken(column, player);
+	}
+	
+	public void undoMove()
+	{
+		this.board[lastMove[0]][lastMove[1]] = Token.empty;
 	}
 	
 	private int insertToken(int column, Token tok) {
@@ -150,6 +151,7 @@ public class Board
 		lastMove = this.lastMove.clone();
 		return lastMove;
 	}
+	
 	public Token getWinner()
 	{
 		for (Direction direction : Direction.values())
@@ -218,21 +220,20 @@ public class Board
 		return lineOfTokens;
 	}
 	
-	public ArrayList<Move> getPossibleMoves(Token player)
+	public ArrayList<Integer> getPossibleMoves()
 	{
-		ArrayList<Move> possibleMoves = new ArrayList<Move>();
+		ArrayList<Integer> possibleMoves = new ArrayList<Integer>();
 
 		for (int col = 0; col < Board.COLS; col++)
 		{
 			if (this.isLegalMove(col))
 			{
-				possibleMoves.add(new Move(col, this.makeGhostMove(col, player)));
+				possibleMoves.add(col);
 			}
 		}		
 		
 		return possibleMoves;
 	}
-	
 	
 	private boolean isValidPosition(int col, int row)
 	{

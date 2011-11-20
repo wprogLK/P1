@@ -16,7 +16,8 @@ public class AwesomePlayer implements IPlayer
 	private static final int[][] quantifierMap = { { 0, 1, 2, 3, 2, 1 }, { 1, 2, 3, 4, 3, 2 }, { 2, 3, 4, 5, 4, 3 },
 			{ 3, 4, 5, 6, 5, 4 }, { 2, 3, 4, 5, 4, 3 }, { 1, 2, 3, 4, 3, 2 }, { 0, 1, 2, 3, 2, 1 } };
 	private static final int winningQuantifier = 1000;
-	private static final int MAX_DEPTH = 6;
+	private static final int MAX_DEPTH = 5;
+	private int evals = 0;
 
 	private static final int VAL_INITIALIZER = Integer.MAX_VALUE;
 
@@ -36,34 +37,36 @@ public class AwesomePlayer implements IPlayer
 	{
 		Board boardCopy = new Board(board);
 
-		return getBestMove(boardCopy);
+		return getBestMove(boardCopy, this.token);
 	}
 
-	private int getBestMove(Board board)
+	private int getBestMove(Board board, Token player)
 	{
-
-		int bestMoveEval = 0;
-		int bestColumn = -1;
-
-		ArrayList<Move> possibleMoves = board.getPossibleMoves(this.token);
-
-		for (Move move : possibleMoves)
+		int maxScore = -VAL_INITIALIZER;
+		int maxMove = 0;
+		for (int move = 0; move < Board.COLS; move++)
 		{
-			int eval = -minmax(move.board, enemy(this.token), 0);
-			if (eval >= bestMoveEval)
+			if (board.isLegalMove(move))
 			{
-				bestMoveEval = eval;
-				bestColumn = move.column;
+				Board copyBoard = board.clone();
+				copyBoard.makeMove(move, player);
+				int score = minmax(copyBoard, enemy(player), 0);
+
+				if (score >= maxScore)
+				{
+					maxScore = score;
+					maxMove = move;
+				}
 			}
 		}
-
-		return bestColumn;
+		System.out.println("Evals:" + this.evals);
+		return maxMove;
 	}
 
 	private int evaluateBoard(Board board)
 	{
 		int score = 0;
-
+		evals++;
 		for (int i = 0; i < Board.COLS; i++)
 		{
 			for (int j = 0; j < Board.ROWS; j++)
@@ -75,6 +78,11 @@ public class AwesomePlayer implements IPlayer
 					score -= AwesomePlayer.quantifierMap[i][j];
 			}
 		}
+		
+		if (board.getWinner()==this.token)
+			score *= AwesomePlayer.winningQuantifier;
+		else if (board.getWinner() == enemy(this.token))
+			score *= -AwesomePlayer.winningQuantifier;
 
 		return score;
 	}
@@ -82,12 +90,7 @@ public class AwesomePlayer implements IPlayer
 	private int minmax(Board board, Token player, int depth)
 	{
 		int maxScore = 0;
-		int minScore = 0;
-
-		/*if (board.getWinner() == this.token)
-			return maxScore;
-		if (board.getWinner() == enemy(this.token))
-			return -maxScore;*/
+		int minScore = 0;		 
 
 		if (depth >= MAX_DEPTH)
 			return this.evaluateBoard(board);
@@ -95,24 +98,29 @@ public class AwesomePlayer implements IPlayer
 		if (player == this.token)
 		{
 			maxScore = -VAL_INITIALIZER;
-			ArrayList<Move> possibleMoves = board.getPossibleMoves(player);
-			for (Move move : possibleMoves)
+			ArrayList<Integer> possibleMoves = board.getPossibleMoves();
+			for (int column : possibleMoves)
 			{
-				int score = minmax(move.board.clone(), enemy(player), depth + 1);
+				Board copyBoard = board.clone();
+				copyBoard.makeMove(column, player);
+				int score = minmax(copyBoard, enemy(player), depth + 1);
 				if (score > maxScore)
 				{
 					maxScore = score;
 				}
+				board.undoMove();
 			}
 			return maxScore;
-		}
+		} 
 		else if (player == enemy(this.token))
 		{
 			minScore = VAL_INITIALIZER;
-			ArrayList<Move> possibleMoves = board.getPossibleMoves(player);
-			for (Move move : possibleMoves)
+			ArrayList<Integer> possibleMoves = board.getPossibleMoves();
+			for (int column : possibleMoves)
 			{
-				int score = minmax(move.board.clone(), enemy(player), depth + 1);
+				Board copyBoard = board.clone();
+				copyBoard.makeMove(column, player);
+				int score = minmax(copyBoard, enemy(player), depth + 1);
 				if (score < minScore)
 				{
 					minScore = score;
