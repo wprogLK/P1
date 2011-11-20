@@ -12,6 +12,10 @@ public class AwesomePlayer implements IPlayer
 	// ¦2¦3¦4¦5¦4¦3¦2¦
 	// ¦1¦2¦3¦4¦3¦2¦1¦
 	// ¦0¦1¦2¦3¦2¦1¦0¦
+	
+	// crashes when loosing???
+	// reihenfolge der generierten möglichen züge ändern
+	// so dass züge in der mitte früher getestet werden -->speed
 
 	private static final int[][] quantifierMap = { { 0, 1, 2, 3, 2, 1 }, { 1, 2, 3, 4, 3, 2 }, { 2, 3, 4, 5, 4, 3 },
 			{ 3, 4, 5, 6, 5, 4 }, { 2, 3, 4, 5, 4, 3 }, { 1, 2, 3, 4, 3, 2 }, { 0, 1, 2, 3, 2, 1 } };
