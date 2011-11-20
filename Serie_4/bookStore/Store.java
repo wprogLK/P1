@@ -1,3 +1,5 @@
+package bookStore;
+
 /*
  Programmierung 1 HS 2011
  Musterlösung Aufgabe 4-2

@@ -36,7 +36,7 @@ public class VierGewinnt {
 		if(opponent.toLowerCase().equals("y")){
 			players[1] = new HumanPlayer();
 		}else{
-			players[1] = new ComputerPlayer();
+			players[1] = new AwesomePlayer();
 		}
 		players[0].setToken(Token.player1);
 		players[1].setToken(Token.player2);

@@ -1,16 +1,19 @@
 package fourInARow;
 
+import java.util.ArrayList;
+
+import fourInARow.VierGewinnt.Direction;
 import fourInARow.VierGewinnt.Token;
 
 
-public class AwesomePlayer implements IPlayer {
+public class AwesomePlayer implements IPlayer 
+{
 	private VierGewinnt.Token token;
 	@Override
 	public String getProgrammers() 
 	{
 		return "Urs Gerber & Lukas Keller";
 	}
-
 
 	@Override
 	public Token getToken() 
@@ -21,65 +24,70 @@ public class AwesomePlayer implements IPlayer {
 	@Override
 	public int getNextColumn(Token[][] board)
 	{
+		Board boardCopy = new Board(board);
 		
+		return getBestMove(boardCopy);
+	}
+		
+	private int getBestMove(Board board)
+	{
+		ArrayList<Move> possibleMoves = new ArrayList<Move>();
+		
+		for (int col = 0; col < Board.COLS; col++)
+		{
+			if (board.isLegalMove(col))
+			{
+				possibleMoves.add(new Move(col, board.makeGhostMove(col, this.token)));
+			}
+		}
+		
+		int bestMoveEval = 0;
+		int bestColumn = -1;
+		
+		for (Move move : possibleMoves)
+		{
+			int eval = evaluateBoard(move.board);
+			if (eval >= bestMoveEval)
+			{
+				bestMoveEval = eval;
+				bestColumn = move.column;
+			}
+		}
+		
+		return bestColumn;
+	}
+	
+	private int evaluateBoard(Board board)
+	{
 		return 0;
+	}
+	
+	private boolean checkWinner(Token player)
+	{
+		return false;
 	}
 
 	@Override
 	public void setToken(Token token) 
 	{
-		this.token=token;
-		
+		this.token = token;
 	}
 	
-	
-	private class Board
+	private class Move
 	{
-		private final int COLS=VierGewinnt.COLS;
-		private final int ROWS=VierGewinnt.ROWS;
+		public Board board;
+		public int column;
 		
-		private Token[][] board = new Token[COLS][ROWS]; // 7 columns with 6 fields each
-		
-		private int insertToken(int column, Token tok) {
-			
-			if (columnIsFull(column))
-				return -1;
-			int finalRow = 0;
-			for (int row = 0; row < ROWS; row++)
-			{
-				finalRow = row;
-				if (this.board[column][row] == Token.empty)
-				{
-					this.board[column][row] = tok;
-					break;
-				}
-			}
-			return finalRow;
-		}
-		
-		private boolean columnIsFull(int column)
+		public Move()
 		{
-			for (int i = 0; i < ROWS; i++)
-			{
-				if (this.board[column][i] == Token.empty)
-					return false;
-			}
-			return true;
+			this.board = new Board();
+			this.column = -1;
 		}
 		
-		
-		/** Checks if every position is occupied */
-		private boolean isBoardFull() {
-			for (int i = 0; i < COLS; i++)
-			{
-				for (int j = 0; j < ROWS; j++)
-				{
-					if (this.board[i][j] == Token.empty)
-						return false;
-				}
-			}
-			return true;
+		public Move(int column, Board board)
+		{
+			this.column = column;
+			this.board = board;
 		}
 	}
-
 }
