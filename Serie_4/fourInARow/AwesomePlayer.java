@@ -2,92 +2,139 @@ package fourInARow;
 
 import java.util.ArrayList;
 
-import fourInARow.VierGewinnt.Direction;
 import fourInARow.VierGewinnt.Token;
 
-
-public class AwesomePlayer implements IPlayer 
+public class AwesomePlayer implements IPlayer
 {
+	// ¦1¦2¦3¦4¦3¦2¦1¦
+	// ¦2¦3¦4¦5¦4¦3¦2¦
+	// ¦3¦4¦5¦6¦5¦4¦3¦
+	// ¦2¦3¦4¦5¦4¦3¦2¦
+	// ¦1¦2¦3¦4¦3¦2¦1¦
+	// ¦0¦1¦2¦3¦2¦1¦0¦
+
+	private static final int[][] quantifierMap = { { 0, 1, 2, 3, 2, 1 }, { 1, 2, 3, 4, 3, 2 }, { 2, 3, 4, 5, 4, 3 },
+			{ 3, 4, 5, 6, 5, 4 }, { 2, 3, 4, 5, 4, 3 }, { 1, 2, 3, 4, 3, 2 }, { 0, 1, 2, 3, 2, 1 } };
+	private static final int winningQuantifier = 1000;
+	private static final int MAX_DEPTH = 6;
+
+	private static final int VAL_INITIALIZER = Integer.MAX_VALUE;
+
 	private VierGewinnt.Token token;
-	@Override
-	public String getProgrammers() 
+
+	public String getProgrammers()
 	{
 		return "Urs Gerber & Lukas Keller";
 	}
 
-	@Override
-	public Token getToken() 
+	public Token getToken()
 	{
 		return this.token;
 	}
 
-	@Override
 	public int getNextColumn(Token[][] board)
 	{
 		Board boardCopy = new Board(board);
-		
+
 		return getBestMove(boardCopy);
 	}
-		
+
 	private int getBestMove(Board board)
 	{
-		ArrayList<Move> possibleMoves = new ArrayList<Move>();
-		
-		for (int col = 0; col < Board.COLS; col++)
-		{
-			if (board.isLegalMove(col))
-			{
-				possibleMoves.add(new Move(col, board.makeGhostMove(col, this.token)));
-			}
-		}
-		
+
 		int bestMoveEval = 0;
 		int bestColumn = -1;
-		
+
+		ArrayList<Move> possibleMoves = board.getPossibleMoves(this.token);
+
 		for (Move move : possibleMoves)
 		{
-			int eval = evaluateBoard(move.board);
+			int eval = -minmax(move.board, enemy(this.token), 0);
 			if (eval >= bestMoveEval)
 			{
 				bestMoveEval = eval;
 				bestColumn = move.column;
 			}
 		}
-		
+
 		return bestColumn;
 	}
-	
+
 	private int evaluateBoard(Board board)
 	{
-		return 0;
+		int score = 0;
+
+		for (int i = 0; i < Board.COLS; i++)
+		{
+			for (int j = 0; j < Board.ROWS; j++)
+			{
+				Token testToken = board.getTokenAt(i, j);
+				if (testToken == this.token)
+					score += AwesomePlayer.quantifierMap[i][j];
+				else if (testToken == enemy(this.token))
+					score -= AwesomePlayer.quantifierMap[i][j];
+			}
+		}
+
+		return score;
 	}
-	
-	private boolean checkWinner(Token player)
+
+	private int minmax(Board board, Token player, int depth)
 	{
-		return false;
+		int maxScore = 0;
+		int minScore = 0;
+
+		/*if (board.getWinner() == this.token)
+			return maxScore;
+		if (board.getWinner() == enemy(this.token))
+			return -maxScore;*/
+
+		if (depth >= MAX_DEPTH)
+			return this.evaluateBoard(board);
+
+		if (player == this.token)
+		{
+			maxScore = -VAL_INITIALIZER;
+			ArrayList<Move> possibleMoves = board.getPossibleMoves(player);
+			for (Move move : possibleMoves)
+			{
+				int score = minmax(move.board.clone(), enemy(player), depth + 1);
+				if (score > maxScore)
+				{
+					maxScore = score;
+				}
+			}
+			return maxScore;
+		}
+		else if (player == enemy(this.token))
+		{
+			minScore = VAL_INITIALIZER;
+			ArrayList<Move> possibleMoves = board.getPossibleMoves(player);
+			for (Move move : possibleMoves)
+			{
+				int score = minmax(move.board.clone(), enemy(player), depth + 1);
+				if (score < minScore)
+				{
+					minScore = score;
+				}
+			}
+			return minScore;
+		}
+		return 0;
 	}
 
 	@Override
-	public void setToken(Token token) 
+	public void setToken(Token token)
 	{
 		this.token = token;
 	}
-	
-	private class Move
+
+	public Token enemy(Token player)
 	{
-		public Board board;
-		public int column;
-		
-		public Move()
-		{
-			this.board = new Board();
-			this.column = -1;
-		}
-		
-		public Move(int column, Board board)
-		{
-			this.column = column;
-			this.board = board;
-		}
+		if (player == Token.player1)
+			return Token.player2;
+		if (player == Token.player2)
+			return Token.player1;
+		return Token.empty;
 	}
 }

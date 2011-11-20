@@ -1,6 +1,8 @@
 package fourInARow;
 
 import java.util.ArrayList;
+
+import fourInARow.Move;
 import fourInARow.VierGewinnt.Token;
 
 public class Board
@@ -10,6 +12,9 @@ public class Board
 	
 	private Token[][] board = new Token[COLS][ROWS]; // 7 columns with 6 fields each
 	public enum Direction { HORIZONTAL, VERTICAL, DIAGONAL_RIGHT, DIAGONAL_LEFT }
+	
+	public int[] lastMove = new int[2];
+	public Token lastToken;
 	
 	public Board(Token[][] board)
 	{
@@ -25,6 +30,8 @@ public class Board
 	public Board()
 	{
 		this.board = new Token[Board.COLS][Board.ROWS];
+		this.lastMove = new int[2];
+		this.lastToken = Token.empty;
 	}
 	
 	public Board(Board board)
@@ -36,6 +43,9 @@ public class Board
 				 this.board[i][j] = board.board[i][j];
 			 }
 		}
+		this.lastMove[0] = board.lastMove[0];
+		this.lastMove[1] = board.lastMove[1];
+		this.lastToken = board.lastToken;
 	}
 	
 	public Board clone()
@@ -70,6 +80,11 @@ public class Board
 				break;
 			}
 		}
+		
+		this.lastMove[0] = column;
+		this.lastMove[1] = finalRow;
+		this.lastToken = this.board[column][finalRow];
+				
 		return finalRow;
 	}
 	
@@ -124,15 +139,42 @@ public class Board
 		return true;
 	}
 	
+	public Token getLastPlayer()
+	{
+		return this.lastToken;
+	}
 	
-	/** Checks for at least four equal tokens in a row in either direction,
-	    starting from the given position. */
-	private boolean checkWinner(int col, int row)
+	public int[] getLastMove()
+	{
+		int[] lastMove = new int[2];
+		lastMove = this.lastMove.clone();
+		return lastMove;
+	}
+	public Token getWinner()
 	{
 		for (Direction direction : Direction.values())
 		{
-			Token lastToken = board[col][row];
-			if (checkLineOfTokens(getLineOfTokens(col, row, direction), lastToken))
+			int lastCol = this.lastMove[0];
+			int lastRow = this.lastMove[1];
+			Token lastToken = board[lastCol][lastRow];
+			if (checkLineOfTokens(getLineOfTokens(lastCol, lastRow, direction), lastToken))
+				return lastToken;
+		}
+		return Token.empty;
+	}
+	
+
+	private boolean checkLineOfTokens(ArrayList<Token> lineOfTokens, Token lastToken)
+	{
+		int counter = 0;
+		for (Token token : lineOfTokens)
+		{
+			if (token == lastToken)
+				counter++;
+			else
+				counter = 0;
+			
+			if (counter>=4)
 				return true;
 		}
 		return false;
@@ -176,21 +218,21 @@ public class Board
 		return lineOfTokens;
 	}
 	
-	private boolean checkLineOfTokens(ArrayList<Token> lineOfTokens, Token lastToken)
+	public ArrayList<Move> getPossibleMoves(Token player)
 	{
-		int counter = 0;
-		for (Token token : lineOfTokens)
+		ArrayList<Move> possibleMoves = new ArrayList<Move>();
+
+		for (int col = 0; col < Board.COLS; col++)
 		{
-			if (token == lastToken)
-				counter++;
-			else
-				counter = 0;
-			
-			if (counter>=4)
-				return true;
-		}
-		return false;
+			if (this.isLegalMove(col))
+			{
+				possibleMoves.add(new Move(col, this.makeGhostMove(col, player)));
+			}
+		}		
+		
+		return possibleMoves;
 	}
+	
 	
 	private boolean isValidPosition(int col, int row)
 	{
