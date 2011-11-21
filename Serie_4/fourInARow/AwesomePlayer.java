@@ -22,6 +22,7 @@ public class AwesomePlayer implements IPlayer
 	private static final int winningQuantifier = 1000;
 	private static final int MAX_DEPTH = 8;
 	private int evals = 0;
+	private int steps = 0;
 
 	private static final int VAL_INITIALIZER = Integer.MAX_VALUE;
 
@@ -39,6 +40,7 @@ public class AwesomePlayer implements IPlayer
 
 	public int getNextColumn(Token[][] board)
 	{
+		System.out.println("\n"+VierGewinnt.displayBoard(board));
 		Board boardCopy = new Board(board);
 
 		return getBestMove(boardCopy, this.token);
@@ -47,7 +49,7 @@ public class AwesomePlayer implements IPlayer
 	private int getBestMove(Board board, Token player)
 	{
 		int bestMove = -1;
-		int bestEval = -99999;
+		int bestEval = -99999999;
 
 		ArrayList<Integer> possibleMoves = board.getPossibleMoves();
 
@@ -63,6 +65,8 @@ public class AwesomePlayer implements IPlayer
 			}
 		}
 		System.out.println("Evals:" + this.evals);
+		System.out.println("Last best eval:" + bestEval);
+		System.out.println("Num steps:" + steps);
 		return bestMove;
 	}
 
@@ -89,6 +93,7 @@ public class AwesomePlayer implements IPlayer
 	private int negamax(Board board, Token currentPlayer, int alpha, int beta, int depth)
 	{
 		int eval = 0;
+		steps++;
 		
 		if (depth <= 0)
 			return this.evaluateBoard(board, currentPlayer);
