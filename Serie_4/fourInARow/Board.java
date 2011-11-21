@@ -57,14 +57,14 @@ public class Board
 		return this.board[col][row];
 	}
 	
-	public void makeMove(int column, Token player)
+	public int makeMove(int column, Token player)
 	{
-		insertToken(column, player);
+		return insertToken(column, player);
 	}
 	
-	public void undoMove()
+	public void undoMove(int[] position)
 	{
-		this.board[lastMove[0]][lastMove[1]] = Token.empty;
+		this.board[position[0]][position[1]] = Token.empty;
 	}
 	
 	private int insertToken(int column, Token tok) {
@@ -128,7 +128,7 @@ public class Board
 	}
 	
 	/** Checks if every position is occupied */
-	private boolean isBoardFull() {
+	public boolean isBoardFull() {
 		for (int i = 0; i < COLS; i++)
 		{
 			for (int j = 0; j < ROWS; j++)

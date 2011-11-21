@@ -30,7 +30,7 @@ public class VierGewinnt {
 			Arrays.fill(column, Token.empty);
 		}
 		// initialize players
-		players[0] = new HumanPlayer();
+		players[0] = new AwesomePlayer();
 		System.out.print("Play against a human opponent? (y / n) ");
 		String opponent = new Scanner(System.in).nextLine();
 		if(opponent.toLowerCase().equals("y")){
