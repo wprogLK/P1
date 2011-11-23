@@ -35,7 +35,7 @@ public class AwesomePlayer implements IPlayer
 //	private static final int[][] quantifierMap = { { 0, 2, 2, 3, 1,1 }, { 2, 3, 3, 4, 2,2 }, { 4, 4, 4, 5, 3,3 },
 //		{ 8, 6, 5, 5, 4,3 },{ 4, 4, 4, 5, 3,3 }, { 2, 3, 3, 4, 2,2 }, { 0, 2, 2, 3, 1,1 } };
 	
-	private static final int MAX_DEPTH = 10;
+	private static final int MAX_DEPTH = 5;
 	private static final int WINNING_SCORE = 1000;
 	private static final int UNDEF_SCORE = 1000000;
 	
@@ -79,9 +79,9 @@ public class AwesomePlayer implements IPlayer
 				{
 					bestEval = eval;
 					bestMove = col;
-					// If Charlie Sheen situation (aka WINNING) no need to predict more moves
-					if (bestEval >= WINNING_SCORE)
-						break;
+//					// If Charlie Sheen situation (aka WINNING) no need to predict more moves
+//					if (bestEval >= WINNING_SCORE)
+//						break;
 				}
 			}
 		}
