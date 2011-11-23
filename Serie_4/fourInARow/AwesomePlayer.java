@@ -1,6 +1,7 @@
 package fourInARow;
 
-import java.util.ArrayList;
+// To Lukas: AVOID CREATING OBJECTS IN NEGAMAX RECURSIVE FUNCTION AT ALL COST!!!
+// NOT USING LISTS RESULTED IN A ~20 TIMES SPEEDUP OF CHECKWIN FUNCTION!!!
 
 import fourInARow.VierGewinnt.Token;
 
@@ -29,12 +30,12 @@ public class AwesomePlayer implements IPlayer
 
 //	private static final int[][] quantifierMap = { { 0, 1, 2, 3, 2, 1 }, { 1, 2, 3, 4, 3, 2 }, { 2, 3, 4, 5, 4, 3 },
 //			{ 3, 4, 5, 6, 5, 4 }, { 2, 3, 4, 5, 4, 3 }, { 1, 2, 3, 4, 3, 2 }, { 0, 1, 2, 3, 2, 1 } };
-//	private static final int[][] quantifierMap = { { 1, 2, 3, 2, 1,0 }, { 2, 3, 4, 3, 2,1 }, { 3, 4, 5, 4, 3,2 },
-//		{ 4, 5, 6, 5, 4,3 }, { 3, 4, 5, 4, 3,2 }, { 2, 3, 4, 3, 2,1 }, { 1, 2, 3, 2, 1,0 } };
-	private static final int[][] quantifierMap = { { 0, 2, 2, 3, 1,1 }, { 2, 3, 3, 4, 2,2 }, { 4, 4, 4, 5, 3,3 },
-		{ 8, 6, 5, 5, 4,3 },{ 4, 4, 4, 5, 3,3 }, { 2, 3, 3, 4, 2,2 }, { 0, 2, 2, 3, 1,1 } };
+	private static final int[][] quantifierMap = { { 1, 2, 3, 2, 1,0 }, { 2, 3, 4, 3, 2,1 }, { 3, 4, 5, 4, 3,2 },
+		{ 4, 5, 6, 5, 4,3 }, { 3, 4, 5, 4, 3,2 }, { 2, 3, 4, 3, 2,1 }, { 1, 2, 3, 2, 1,0 } };
+//	private static final int[][] quantifierMap = { { 0, 2, 2, 3, 1,1 }, { 2, 3, 3, 4, 2,2 }, { 4, 4, 4, 5, 3,3 },
+//		{ 8, 6, 5, 5, 4,3 },{ 4, 4, 4, 5, 3,3 }, { 2, 3, 3, 4, 2,2 }, { 0, 2, 2, 3, 1,1 } };
 	
-	private static final int MAX_DEPTH = 7;
+	private static final int MAX_DEPTH = 8;
 	private static final int WINNING_SCORE = 1000;
 	private static final int UNDEF_SCORE = 1000000;
 	
@@ -62,6 +63,8 @@ public class AwesomePlayer implements IPlayer
 
 	private int getBestMove(Board board, Token player)
 	{
+		// The starting move is illegal, so we will know when algorithm has failed
+		// This is a wanted behaviour!
 		int bestMove = -1;
 		int bestEval = -UNDEF_SCORE;
 
@@ -92,6 +95,8 @@ public class AwesomePlayer implements IPlayer
 
 	private int evaluateBoard(Board board, Token currentPlayer)
 	{
+		// Evaluation MUST be symmetrical aka eval(player1) = -eval(player2)
+		// otherwise negamax will fail!
 		int score = 0;
 		
 		for (int i = 0; i < Board.COLS; i++)
