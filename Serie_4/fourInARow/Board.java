@@ -116,23 +116,17 @@ public class Board
 	
 	private boolean columnIsFull(int column)
 	{
-		for (int i = 0; i < ROWS; i++)
-		{
-			if (this.board[column][i] == Token.empty)
-				return false;
-		}
+		if (this.board[column][Board.ROWS - 1] == Token.empty)
+			return false;
 		return true;
 	}
 	
 	/** Checks if every position is occupied */
-	public boolean isBoardFull() {
+	public boolean isFull() {
 		for (int i = 0; i < COLS; i++)
 		{
-			for (int j = 0; j < ROWS; j++)
-			{
-				if (this.board[i][j] == Token.empty)
-					return false;
-			}
+			if (this.board[i][Board.ROWS - 1] == Token.empty)
+				return false;
 		}
 		return true;
 	}
