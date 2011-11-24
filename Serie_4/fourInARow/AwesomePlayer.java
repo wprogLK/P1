@@ -107,6 +107,8 @@ public class AwesomePlayer implements IPlayer
 //						break;
 				}
 			}
+			if (System.currentTimeMillis() - time >= AwesomePlayer.TIMEOUT_TIME - AwesomePlayer.SAFETY_TIME)
+				throw new TimeoutException();	
 		}
 		
 		System.out.println(String.format("@Depth %d: Evals: %d, Score: %d, Cuts: %d, BestMove: %d", depth, evals, bestEval, betacuts, bestMove+1));
@@ -144,8 +146,8 @@ public class AwesomePlayer implements IPlayer
 	{
 		evals++;
 		
-		if (System.currentTimeMillis() - time >= AwesomePlayer.TIMEOUT_TIME - AwesomePlayer.SAFETY_TIME)
-			throw new TimeoutException();		
+//		if (System.currentTimeMillis() - time >= AwesomePlayer.TIMEOUT_TIME - AwesomePlayer.SAFETY_TIME)
+//			throw new TimeoutException();		
 		
 		int eval = -UNDEF_SCORE;
 		
