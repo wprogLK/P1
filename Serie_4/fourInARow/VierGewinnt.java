@@ -63,8 +63,8 @@ public class VierGewinnt {
 	    and returns the row where the token landed */
 	private int insertToken(int column, Token tok) {
 		
-		if (columnIsFull(column))
-			return -1;
+		if (column < 0 || column > COLS - 1 || columnIsFull(column))
+			System.exit(1);
 		
 		int finalRow = 0;
 		for (int row = 0; row < ROWS; row++)

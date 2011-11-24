@@ -35,7 +35,11 @@ public class AwesomePlayer implements IPlayer
 //	private static final int[][] quantifierMap = { { 0, 2, 2, 3, 1,1 }, { 2, 3, 3, 4, 2,2 }, { 4, 4, 4, 5, 3,3 },
 //		{ 8, 6, 5, 5, 4,3 },{ 4, 4, 4, 5, 3,3 }, { 2, 3, 3, 4, 2,2 }, { 0, 2, 2, 3, 1,1 } };
 	
-	private static final int MAX_DEPTH = 9;
+	private static final int MAX_DEPTH = 30;
+	private static final int INITIAL_DEPTH = 7;
+	private static final int SAFETY_TIME = 20;
+	private static final int TIMEOUT_TIME = 5000;
+	
 	private static final int WINNING_SCORE = 1000;
 	private static final int UNDEF_SCORE = 1000000;
 	
@@ -55,19 +59,37 @@ public class AwesomePlayer implements IPlayer
 
 	public int getNextColumn(Token[][] board)
 	{
+		// NOTE to myself: Maybe not use exceptions for time checking, instead use a unique return value of negamax
+		// to signify timeout
+		
+		int tmpMaxDepth = INITIAL_DEPTH;
+		int tmpBestMove = -1;
 		System.out.println("\n"+VierGewinnt.displayBoard(board));
 		Board boardCopy = new Board(board);
+		long startTime = System.currentTimeMillis();
+		
+		try
+		{
+			while (tmpMaxDepth < AwesomePlayer.MAX_DEPTH)
+			{
+				tmpBestMove = getBestMove(boardCopy, this.token, tmpMaxDepth, startTime);
+				tmpMaxDepth++;
+			}
+		} 
+		catch (TimeoutException toe)
+		{
+			System.out.println(toe.getMessage());
+		}
 
-		return getBestMove(boardCopy, this.token);
+		return tmpBestMove;
 	}
 
-	private int getBestMove(Board board, Token player)
+	private int getBestMove(Board board, Token player, int depth, long time) throws TimeoutException
 	{
 		// The starting move is illegal, so we will know when algorithm has failed
 		// This is a wanted behaviour!
 		int bestMove = -1;
 		int bestEval = -UNDEF_SCORE;
-		
 
 		for (int col = 0; col < Board.COLS; col++)
 		{
@@ -75,8 +97,8 @@ public class AwesomePlayer implements IPlayer
 			{
 				Board copyBoard = board.clone();
 				copyBoard.makeMove(col, player);
-				int eval = -negamax(copyBoard, enemy(player), -UNDEF_SCORE, UNDEF_SCORE, MAX_DEPTH);
-				if (eval >= bestEval)
+				int eval = -negamax(copyBoard, enemy(player), -UNDEF_SCORE, UNDEF_SCORE, depth, time);
+				if (eval > bestEval)
 				{
 					bestEval = eval;
 					bestMove = col;
@@ -87,7 +109,7 @@ public class AwesomePlayer implements IPlayer
 			}
 		}
 		
-		System.out.println(String.format("Evals: %d, Score: %d, Cuts: %d", evals, bestEval, betacuts));
+		System.out.println(String.format("@Depth %d: Evals: %d, Score: %d, Cuts: %d, BestMove: %d", depth, evals, bestEval, betacuts, bestMove+1));
 		
 		if (bestEval >= WINNING_SCORE)
 			System.out.println("You're fucked!");
@@ -118,9 +140,13 @@ public class AwesomePlayer implements IPlayer
 		return score;
 	}
 
-	private int negamax(Board board, Token currentPlayer, int alpha, int beta, int depth)
+	private int negamax(Board board, Token currentPlayer, int alpha, int beta, int depth, long time) throws TimeoutException 
 	{
 		evals++;
+		
+		if (System.currentTimeMillis() - time >= AwesomePlayer.TIMEOUT_TIME - AwesomePlayer.SAFETY_TIME)
+			throw new TimeoutException();		
+		
 		int eval = -UNDEF_SCORE;
 		
 		Token winner = board.getWinner();
@@ -149,18 +175,17 @@ public class AwesomePlayer implements IPlayer
 				int row = board.makeMove(col, currentPlayer);
 				int[] lastMove = { col, row };
 				// Evaluate next move
-				eval = -negamax(board, enemy(currentPlayer), -beta, -alpha, depth - 1);
+				eval = -negamax(board, enemy(currentPlayer), -beta, -alpha, depth - 1, time);
 				// Undo previous move
 				board.undoMove(lastMove);
 				// Pruning
+				if (eval >= beta)
+				{
+					betacuts++;
+					return beta;
+				}
 				if (eval > alpha)
 					alpha = eval;
-				if (alpha >= beta)
-				{
-					// beta prune
-					betacuts++;
-					return alpha;
-				}
 			}
 		}
 		return alpha;
@@ -182,6 +207,8 @@ public class AwesomePlayer implements IPlayer
 	
 	private class TimeoutException extends Exception
 	{
+		private static final long serialVersionUID = -5107743283582197083L;
+
 		public TimeoutException()
 		{
 			super("Computation timeout occured!");
