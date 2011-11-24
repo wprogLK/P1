@@ -67,6 +67,7 @@ public class AwesomePlayer implements IPlayer
 		// This is a wanted behaviour!
 		int bestMove = -1;
 		int bestEval = -UNDEF_SCORE;
+		
 
 		for (int col = 0; col < Board.COLS; col++)
 		{
@@ -75,7 +76,7 @@ public class AwesomePlayer implements IPlayer
 				Board copyBoard = board.clone();
 				copyBoard.makeMove(col, player);
 				int eval = -negamax(copyBoard, enemy(player), -UNDEF_SCORE, UNDEF_SCORE, MAX_DEPTH);
-				if (eval > bestEval)
+				if (eval >= bestEval)
 				{
 					bestEval = eval;
 					bestMove = col;
@@ -178,4 +179,12 @@ public class AwesomePlayer implements IPlayer
 			return Token.player1;
 		return Token.empty;
 	}
+	
+	private class TimeoutException extends Exception
+	{
+		public TimeoutException()
+		{
+			super("Computation timeout occured!");
+		}
+	}	
 }

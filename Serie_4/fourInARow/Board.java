@@ -93,25 +93,19 @@ public class Board
 	
 	public String toString()
 	{
-		String rowDelimiter = "+";
-		String rowNumbering = " ";
-		for(int col=0; col<this.board.length; col++){
-			rowDelimiter += "---+";
-			rowNumbering += " "+(col+1)+"  ";
-		}
-		rowDelimiter += "\n";
+		StringBuilder sb = new StringBuilder();
 		
-		String rowStr;
-		String presentation = rowDelimiter;
-		for(int row=this.board[0].length-1; row >= 0; row--){
-			rowStr = "| ";
-			for(int col=0; col < this.board.length; col++){
-				rowStr += this.board[col][row].toString() + " | ";
+		for (int r = Board.ROWS - 1; r >= 0; r--)
+		{
+			sb.append("|");
+			for (int c = 0; c < Board.COLS; c++)
+			{
+				sb.append(this.board[c][r].toString() + "|");
 			}
-			presentation += rowStr + "\n" + rowDelimiter;
-		}
-		presentation += rowNumbering;
-		return presentation;
+			sb.append("\n");
+		}		
+		
+		return sb.toString();
 	}
 	
 	private boolean columnIsFull(int column)
@@ -121,7 +115,6 @@ public class Board
 		return true;
 	}
 	
-	/** Checks if every position is occupied */
 	public boolean isFull() {
 		for (int i = 0; i < COLS; i++)
 		{
