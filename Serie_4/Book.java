@@ -1,17 +1,24 @@
-package bookStore;
 
-public class DVD implements IArticle
+
+/*
+ Programmierung 1 HS 2011
+ Aufgabe 4-2
+ */
+
+public class Book implements IArticle
 {
 	private int id;
 	private String title;
+	private String author;
 	private int year;
 	private int price; // CHF
 
 	/** constructor */
-	public DVD(int id, String title, int year, int price)
+	public Book(int id, String title, String author, int year, int price)
 	{
 		this.id = id;
 		this.title = title;
+		this.author = author;
 		this.year = year;
 		this.price = price;
 	}
@@ -33,6 +40,6 @@ public class DVD implements IArticle
 
 	public String toString()
 	{
-		return id + " (DVD) " + title + ", " + year + ", " + this.price + " CHF";
+		return id + " (Book) " + title + ", " + author + ", " + year + ", " + this.price + " CHF";
 	}
 }

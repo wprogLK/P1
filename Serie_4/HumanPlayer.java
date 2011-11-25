@@ -1,5 +1,4 @@
-package fourInARow;
-/* Programmierung 1 HS 2011 Aufgabe 4-1 */
+
 
 import java.util.Scanner;
 

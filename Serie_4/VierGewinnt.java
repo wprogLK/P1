@@ -1,4 +1,10 @@
-package fourInARow;
+/*	Exercise 4.1
+ * 	authors:
+ * 		Urs Gerber  	09-921-156
+ * 		Lukas Keller  	10-113-736
+ * 
+ */
+
 /* Programmierung 1 HS 2011 Aufgabe 4-1 */
 
 import java.util.Arrays;
@@ -29,13 +35,13 @@ public class VierGewinnt {
 			Arrays.fill(column, Token.empty);
 		}
 		// initialize players
-		players[0] = new AwesomePlayer();
+		players[0] = new HumanPlayer();
 		System.out.print("Play against a human opponent? (y / n) ");
 		String opponent = new Scanner(System.in).nextLine();
 		if(opponent.toLowerCase().equals("y")){
 			players[1] = new HumanPlayer();
 		}else{
-			players[1] = new AwesomePlayer();
+			players[1] = new ComputerPlayer();
 		}
 		players[0].setToken(Token.player1);
 		players[1].setToken(Token.player2);

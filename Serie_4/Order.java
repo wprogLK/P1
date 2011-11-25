@@ -1,4 +1,9 @@
-package bookStore;
+/*	Exercise 4.2
+ * 	authors:
+ * 		Urs Gerber  	09-921-156
+ * 		Lukas Keller  	10-113-736
+ * 
+ */
 
 import java.util.ArrayList;
 

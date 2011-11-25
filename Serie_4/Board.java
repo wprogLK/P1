@@ -1,18 +1,25 @@
-package fourInARow;
 
-import fourInARow.VierGewinnt.Token;
+/*	Exercise 4.1
+ * 	authors:
+ * 		Urs Gerber  	09-921-156
+ * 		Lukas Keller  	10-113-736
+ * 
+ */
+
+
+
 
 public class Board
 {
 	public static final int COLS = VierGewinnt.COLS;
 	public static final int ROWS = VierGewinnt.ROWS;
 	
-	private Token[][] board = new Token[COLS][ROWS]; // 7 columns with 6 fields each
+	private VierGewinnt.Token[][] board = new VierGewinnt.Token[COLS][ROWS]; // 7 columns with 6 fields each
 	
 	public int[] lastMove = new int[2];
-	public Token lastToken;
+	public VierGewinnt.Token lastToken;
 	
-	public Board(Token[][] board)
+	public Board(VierGewinnt.Token[][] board)
 	{
 		for (int i = 0; i < Board.COLS; i++)
 		{
@@ -25,9 +32,9 @@ public class Board
 	
 	public Board()
 	{
-		this.board = new Token[Board.COLS][Board.ROWS];
+		this.board = new VierGewinnt.Token[Board.COLS][Board.ROWS];
 		this.lastMove = new int[2];
-		this.lastToken = Token.empty;
+		this.lastToken = VierGewinnt.Token.empty;
 	}
 	
 	public Board(Board board)
@@ -49,22 +56,22 @@ public class Board
 		return new Board(this);
 	}
 	
-	public Token getTokenAt(int col, int row)
+	public VierGewinnt.Token getTokenAt(int col, int row)
 	{
 		return this.board[col][row];
 	}
 	
-	public int makeMove(int column, Token player)
+	public int makeMove(int column, VierGewinnt.Token player)
 	{
 		return insertToken(column, player);
 	}
 	
 	public void undoMove(int[] position)
 	{
-		this.board[position[0]][position[1]] = Token.empty;
+		this.board[position[0]][position[1]] = VierGewinnt.Token.empty;
 	}
 	
-	private int insertToken(int column, Token tok) {
+	private int insertToken(int column, VierGewinnt.Token tok) {
 		
 		if (columnIsFull(column))
 			return -1;
@@ -72,7 +79,7 @@ public class Board
 		for (int row = 0; row < ROWS; row++)
 		{
 			finalRow = row;
-			if (this.board[column][row] == Token.empty)
+			if (this.board[column][row] == VierGewinnt.Token.empty)
 			{
 				this.board[column][row] = tok;
 				break;
@@ -110,7 +117,7 @@ public class Board
 	
 	private boolean columnIsFull(int column)
 	{
-		if (this.board[column][Board.ROWS - 1] == Token.empty)
+		if (this.board[column][Board.ROWS - 1] == VierGewinnt.Token.empty)
 			return false;
 		return true;
 	}
@@ -118,13 +125,13 @@ public class Board
 	public boolean isFull() {
 		for (int i = 0; i < COLS; i++)
 		{
-			if (this.board[i][Board.ROWS - 1] == Token.empty)
+			if (this.board[i][Board.ROWS - 1] == VierGewinnt.Token.empty)
 				return false;
 		}
 		return true;
 	}
 	
-	public Token getLastPlayer()
+	public VierGewinnt.Token getLastPlayer()
 	{
 		return this.lastToken;
 	}
@@ -136,10 +143,10 @@ public class Board
 		return lastMove;
 	}
 	
-	public Token getWinner()
+	public VierGewinnt.Token getWinner()
 	{
 	    int x1, y1, x2, y2 = 0;
-	    Token player = this.lastToken;
+	    VierGewinnt.Token player = this.lastToken;
 	    int lastCol = this.lastMove[0];
 	    int lastRow = this.lastMove[1];
 	    
@@ -185,6 +192,6 @@ public class Board
 	    if (x2 - x1 > 4)
 	        return player;
 
-	    return Token.empty;
+	    return VierGewinnt.Token.empty;
 	}
 }

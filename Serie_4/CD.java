@@ -1,11 +1,13 @@
-package bookStore;
-
-/*
- Programmierung 1 HS 2011
- Aufgabe 4-2
+/*	Exercise 4.2
+ * 	authors:
+ * 		Urs Gerber  	09-921-156
+ * 		Lukas Keller  	10-113-736
+ * 
  */
 
-public class Book implements IArticle
+
+
+public class CD implements IArticle
 {
 	private int id;
 	private String title;
@@ -14,7 +16,7 @@ public class Book implements IArticle
 	private int price; // CHF
 
 	/** constructor */
-	public Book(int id, String title, String author, int year, int price)
+	public CD(int id, String title, String author, int year, int price)
 	{
 		this.id = id;
 		this.title = title;
@@ -40,6 +42,6 @@ public class Book implements IArticle
 
 	public String toString()
 	{
-		return id + " (Book) " + title + ", " + author + ", " + year + ", " + this.price + " CHF";
+		return id + " (CD) " + title + ", " + author + ", " + year + ", " + this.price + " CHF";
 	}
 }

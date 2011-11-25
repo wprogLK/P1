@@ -1,8 +1,4 @@
-package fourInARow;
-/*
- Programmierung 1 HS 2011
- Aufgabe 4-1
-*/
+
 
 /** Inferface for VierGewinnt players */
 public interface IPlayer{
