@@ -1,0 +1,2 @@
+id : 1    ;    name :  Max Frisch ; street: Bahnhofstrasse 35; zip :   1001  ;   city  : Zürich ; 
+id : 2   ;  name  :    Sophie Muster ; street : Hauptstrasse 29; zip  :   1961  ;  city :  Fantasia;

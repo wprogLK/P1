@@ -1,0 +1,3 @@
+id: 1; name: Max Muster; street: Neubrückstr. 10; zip: 3012; city: Bern;
+id: 1; name: Sophie Meier; street: Bahnhofstrasse 2; zip: 3400; city: Burgdorf;
+id: 1; name: Anna Kunz; street: Mittelstrasse 4; zip: 3012; city: Bern;
