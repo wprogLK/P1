@@ -1,11 +1,9 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -20,13 +18,9 @@ public class AddressFile
 
 	public String toLine(Address addr) 
 	{
-		StringBuilder sb = new StringBuilder();
-
-		sb.append(String.format("%d, %s, %s, %d, %s", addr.getId(),
+		return String.format("%d, %s, %s, %d, %s", addr.getId(),
 				addr.getName(), addr.getStreet(), addr.getZipCode(),
-				addr.getCity()));
-
-		return sb.toString();
+				addr.getCity());
 	}
 
 	public Address parseLine(String line) throws AddressFileException
@@ -58,7 +52,7 @@ public class AddressFile
 		BufferedWriter bufferdWriter = new BufferedWriter(fileWriter);
 		PrintWriter printWriter = new PrintWriter(bufferdWriter);
 		
-		for(Address addr : addresses)
+		for (Address addr : addresses)
 		{
 			printWriter.println(this.toLine(addr));
 		}
@@ -71,16 +65,10 @@ public class AddressFile
 		FileReader fileReader = new FileReader(this.filename);
 		BufferedReader bufferdReader = new BufferedReader(fileReader);
 		ArrayList<Address> addresses = new ArrayList<Address>();
-
 		String line = null;
 		
-		do
-		{
-			line = bufferdReader.readLine();
-			if (line != null)
-				addresses.add(this.parseLine(line));
-		}
-		while(line != null);
+		while ((line = bufferdReader.readLine()) != null)
+			addresses.add(this.parseLine(line));
 		
 		return addresses;
 	}
