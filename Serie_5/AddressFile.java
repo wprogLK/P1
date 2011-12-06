@@ -49,8 +49,8 @@ public class AddressFile
 	public void save(ArrayList<Address> addresses) throws IOException
 	{
 		FileWriter fileWriter = new FileWriter(this.filename);
-		BufferedWriter bufferdWriter = new BufferedWriter(fileWriter);
-		PrintWriter printWriter = new PrintWriter(bufferdWriter);
+		BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		PrintWriter printWriter = new PrintWriter(bufferedWriter);
 		
 		for (Address addr : addresses)
 		{
@@ -63,11 +63,11 @@ public class AddressFile
 	public ArrayList<Address> load() throws AddressFileException, IOException 
 	{
 		FileReader fileReader = new FileReader(this.filename);
-		BufferedReader bufferdReader = new BufferedReader(fileReader);
+		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		ArrayList<Address> addresses = new ArrayList<Address>();
 		String line = null;
 		
-		while ((line = bufferdReader.readLine()) != null)
+		while ((line = bufferedReader.readLine()) != null)
 			addresses.add(this.parseLine(line));
 		
 		return addresses;
