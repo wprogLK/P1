@@ -70,6 +70,8 @@ public class AddressFile
 		while ((line = bufferedReader.readLine()) != null)
 			addresses.add(this.parseLine(line));
 		
+		bufferedReader.close();
+		
 		return addresses;
 	}
 }
