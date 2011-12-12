@@ -22,38 +22,35 @@ public class MergeSort
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static void merge(Comparable[] array, Comparable[] copy, int left, int center, int right)
+	private static void merge(Comparable[] array, Comparable[] copy, int leftStart, int rightStart, int rightEnd)
 	{
-		int endLeft = center - 1;
-		int endRight = right;
+		int endLeft = rightStart - 1;
 		
-		int leftIdx = left;
-		int rightIdx = center;
-		int idx = left;
+		int leftIdx = leftStart;
+		int rightIdx = rightStart;
+		int idx = leftStart;
 		
-		while (leftIdx <= endLeft && rightIdx <= endRight)
+		while (leftIdx <= endLeft && rightIdx <= rightEnd)
 		{
 			Comparable leftElement = array[leftIdx];
 			Comparable rightElement = array[rightIdx];
 			
 			if (leftElement.compareTo(rightElement) <= 0)
 			{
-				copy[idx] = leftElement;
+				copy[idx++] = leftElement;
 				leftIdx++;
-				idx++;
 			}
 			else
 			{
-				copy[idx] = rightElement;
+				copy[idx++] = rightElement;
 				rightIdx++;
-				idx++;
 			}
 		}
 		
-		while (leftIdx <= endLeft) { copy[idx] = array[leftIdx]; leftIdx++; idx++; }
-		while (rightIdx <= endRight) { copy[idx] = array[rightIdx]; rightIdx++; idx++; }
+		while (leftIdx <= endLeft) copy[idx++] = array[leftIdx++];
+		while (rightIdx <= rightEnd) copy[idx++] = array[rightIdx++];
 		
-		for (int i = left; i <= endRight; i++)
+		for (int i = leftStart; i <= rightEnd; i++)
 		{
 			array[i] = copy[i];
 		}
