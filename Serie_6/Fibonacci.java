@@ -1,8 +1,14 @@
 public class Fibonacci
 {
+	static final boolean iterative = true;
+	
 	public static void main(String[] args)
 	{
-		System.out.print(fibIterative(2));
+		int n = 50;
+		if (iterative)
+			System.out.print(fibIterative(n));
+		else
+			System.out.print(fib(n));
 	}
 	
 	public static long fib(int i)
