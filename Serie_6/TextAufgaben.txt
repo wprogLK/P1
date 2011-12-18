@@ -1,0 +1,21 @@
+/*
+ * Urs Gerber, 09-921-156
+ * Lukas Keller, 10-113-736
+ * 
+ * Aufgabe 6-1-1, 6-1-3
+ */
+
+TextAufgaben
+
+6-1-1: 	Das Programm terminiert erst nach sehr langer Rechenzeit (> 1 min)
+
+6-1-2: 	Die Fakultätsfunktion ruft sich nur einmal selbst auf -> Komplexität O(n).
+	 	Die Fibonacci-Funktion ruft sich selbst zweimal auf. Es entsteht ein 
+	 	Binärbaum ähnliches Gebilde -> Komplexität O(2^n)
+	 	
+6-1-4:	Schleife			|		Rekursion
+		-----------------------------------------
+		Laufvariable			Funktionsparameter
+		Abbruchbedingung		Basisfall
+		Variableninkrement		Ändern des Wertes des Funktionsparameters
+				 

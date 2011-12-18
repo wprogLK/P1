@@ -1,6 +1,12 @@
+/*
+ * Urs Gerber, 09-921-156
+ * Lukas Keller, 10-113-736
+ * 
+ * Aufgabe 6-2
+ */
+
 public class MergeSort
 {	
-	@SuppressWarnings("rawtypes")
 	public static void sort(Comparable[] array)
 	{	
 		Comparable[] shadow = new Comparable[array.length];
@@ -8,54 +14,54 @@ public class MergeSort
 		mergeSort(array, shadow, 0, array.length - 1);
 	}
 	
-	@SuppressWarnings("rawtypes")
-	private static void mergeSort(Comparable[] array, Comparable[] copy, int left, int right)
+	private static void mergeSort(Comparable[] array, Comparable[] shadow, int leftStart, int rightStart)
 	{
-		if (right - left <= 0) return;
+		if (rightStart - leftStart <= 0) return;
 		
-		int center = (left + right) / 2;
+		int center = (leftStart + rightStart) / 2;
 		
-		mergeSort(array, copy, left, center);
-		mergeSort(array, copy, center + 1, right);
-		
-		merge(array, copy, left, center + 1, right);
+		// Sort left subarray
+		mergeSort(array, shadow, leftStart, center);
+		// Sort right subarray
+		mergeSort(array, shadow, center + 1, rightStart);
+		// Merge both arrays
+		merge(array, shadow, leftStart, center + 1, rightStart);
 	}
 	
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private static void merge(Comparable[] array, Comparable[] copy, int left, int center, int right)
+	private static void merge(Comparable[] array, Comparable[] shadow, int leftStart, int rightStart, int rightEnd)
 	{
-		int endLeft = center - 1;
-		int endRight = right;
+		int endLeft = rightStart - 1;
 		
-		int leftIdx = left;
-		int rightIdx = center;
-		int idx = left;
+		int leftIdx = leftStart;
+		int rightIdx = rightStart;
+		int idx = leftStart;
 		
-		while (leftIdx <= endLeft && rightIdx <= endRight)
+		// Merge both sorted subarrays
+		while (leftIdx <= endLeft && rightIdx <= rightEnd)
 		{
 			Comparable leftElement = array[leftIdx];
 			Comparable rightElement = array[rightIdx];
 			
 			if (leftElement.compareTo(rightElement) <= 0)
 			{
-				copy[idx] = leftElement;
+				shadow[idx++] = leftElement;
 				leftIdx++;
-				idx++;
 			}
 			else
 			{
-				copy[idx] = rightElement;
+				shadow[idx++] = rightElement;
 				rightIdx++;
-				idx++;
 			}
 		}
 		
-		while (leftIdx <= endLeft) { copy[idx] = array[leftIdx]; leftIdx++; idx++; }
-		while (rightIdx <= endRight) { copy[idx] = array[rightIdx]; rightIdx++; idx++; }
+		// Merge all leftovers
+		while (leftIdx <= endLeft)
+			shadow[idx++] = array[leftIdx++];
+		while (rightIdx <= rightEnd)
+			shadow[idx++] = array[rightIdx++];
 		
-		for (int i = left; i <= endRight; i++)
-		{
-			array[i] = copy[i];
-		}
+		// Copy sorted values back to original array
+		for (int i = leftStart; i <= rightEnd; i++)
+			array[i] = shadow[i];
 	}
 }

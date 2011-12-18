@@ -1,3 +1,10 @@
+/*
+ * Urs Gerber, 09-921-156
+ * Lukas Keller, 10-113-736
+ * 
+ * Aufgabe 6-1-4
+ */
+
 public class Recursion
 {
 	public static void main(String[] args)
@@ -12,10 +19,4 @@ public class Recursion
 		System.out.println(i);
 		recursive(i+3);
 	}
-	
-	/*
-	 * In recursive functions, terminating conditions are equivalent to conditions in loops.
-	 * Increment statements in loops are replaced by an alteration of the recursion parameters
-	 * which are then tested for termination condition
-	 */
 }
