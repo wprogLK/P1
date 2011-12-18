@@ -6,6 +6,7 @@ import java.util.List;
 public class Dictionary
 {
 	private HashMap<String, List<String>> map;
+	private final boolean override = false;
 	
 	public Dictionary()
 	{
@@ -16,7 +17,7 @@ public class Dictionary
 	{
 		List<String> newValues = new ArrayList<String>(Arrays.asList(values));
 		
-		if (!map.containsKey(key)) 
+		if (!map.containsKey(key) || override) 
 			this.map.put(key, newValues);
 		else
 			(this.map.get(key)).addAll(newValues);	
